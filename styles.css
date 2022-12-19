@@ -79,7 +79,7 @@ html {
     top: 0px;
     //height: 100%;
     //margin-top:20px;
-    width: calc(95% - 25px);
+    width: 99%; //calc(95% - 25px);
     display: inline-block;
     background: rgb(29, 29, 29) !important;
     border-radius: 5px;
