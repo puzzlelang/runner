@@ -1,3 +1,7 @@
-# LX
+# PUZZLE Runner
 
-LX is an interactive browser-based runtime for luke scipts.
+An interactive runtime for PUZZLE programs
+
+* Write PUZZLE scripts
+* Run programs
+* In the browser, on the web
