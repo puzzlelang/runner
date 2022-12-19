@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>PUZZLE</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/puzzlelang@latest/puzzle.browser.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Puzzle Shell">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="leto-min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://unpkg.com/@isomorphic-git/lightning-fs"></script>
+    <script type="module">
+         fs = new LightningFS('fs');
+        import http from 'https://unpkg.com/isomorphic-git@beta/http/web/index.js';
+        window.http = http;
+    </script>
+</head>
+
+<body>
+    <div id="app" class="leto-frame">
+        <div class="output leto-pv-sm leto-group bottom-sheet" style="background: rgb(16 16 16)">
+            <div class="dropdown leto-card leto-border-none leto-m leto-mt-md-tablet leto-ml-xl-tablet" v-if="currentProject == '__..__'">
+                 
+                    <div class="leto-text-sm leto-ml-sm leto-text-dark-grey leto-button-sm leto-click leto-inline-block " v-if="currentProject != null" v-on:click="currentProject = undefined">
+                                    <div style="font-weight:bold;color:#999999">
+                                       
+                                            <i class="fa fa-code"></i> ...
+                                        
+                                    </div>
+                                </div>
+
+                <div v-for="(project, k) in projects" class="leto-inline-block leto-m-xs leto-click" v-on:click="useProject(k)">
+                    {{k.split('/')[k.split('/').length-1]}} <span v-on:click="unlinkProject(k)" class="fa fa-unlink"></span>
+                </div>
+                <div class="leto-button-xs leto-text-white leto-border-none" v-on:click="addProject(undefined);addOptionsShown=false"><span class="">+</span></div>
+            </div>
+           
+            <center style="width: 100%">
+                <div class="main-wrapper leto-text-center" style="max-height: 100%;overflow: scroll;">
+                    <div class="leto-text-left leto-group">
+                        <div class="leto-width-fifth" style="min-width: 200px;">
+                        
+                           <div class="leto-ml-xs leto-text-left" v-if="ideMode || true">
+                                        
+                                        <!--div class="leto-block leto-text-xs leto-text-white leto-m-xs"><b>Scripts</b> </div-->
+                                        <div v-for="(project, k) in projects" class="leto-block" v-if="!addOptionsShown && currentProject == k">
+                                           
+                                            <subdir :k="k" />
+                                        </div>
+                                </div>
+
+                        </div>
+
+                        <div class="main-content leto-width-four-fifths leto-text-left" style="background: none;">
+
+                              <div class="leto-pt" v-show="currentProject != '__..__'">
+ 
+                            
+                            <div class="" style="
+                    padding: 10px;padding-bottom: 0px;
+                    border-radius: 10px;max-width: 95%">
+                                    <div id="editor"></div>
+                                    </div>
+
+                                    <div class="leto-ml leto-group">
+<div class="leto-text-dark-grey leto-bubble-xs leto-click leto-group leto-vertical-center leto-horizontal-center leto-mh-xxs" v-if="!scriptOptionsShown" v-bind:class="{'disabled': !content}" v-on:click="runCode(content)"><i class="fa fa-play"></i></div>
+
+                                    <div class="leto-text-dark-grey leto-bubble-xs leto-click leto-mh-xxs" v-if="!scriptOptionsShown" v-bind:class="{'disabled': !content || !currentProject}" v-on:click="saveContent()"><i class="fa fa-save"></i></div>
+
+                                    <div class="leto-text-dark-grey leto-bubble-xs leto-mh-xxs leto-click" v-if="!scriptOptionsShown" v-bind:class="{'disabled': !content || !currentProject}" v-on:click="openWindow(openedFile)"><i class="fa fa-window-maximize"></i></div>
+                                    
+                                </div>
+                             
+                            </div>
+                          
+                            </div>
+
+                          
+                        </div>
+                        <div class="leto-text-left leto-group">
+
+                            <div class="leto-width-fifth" style="min-width: 200px;">
+                            </div>
+                            <div>
+
+                                  <div class="" v-show="output">
+                                      <div class="leto-pl-xs" >
+                                <pre class="leto-text-white " style="margin-left: 10px;display: inline-block;color:#999999" v-html="output"></pre>
+                                </div>
+
+                                </div>
+                               
+                                <div  id="ui"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </center>
+            <div class="leto-fifth-tablet">
+            </div>
+        </div>
+    </div>
+    <script src="ace-builds-1.1.4/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="subdir.js"></script>
+    <script src="index.js"></script>
+    <script>
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+
+    document.title = getParameterByName('name') || 'PUZZLE'
+
+    puzzle.parse(window.puzzle_script)
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,7 @@
+{
+  "name": "PUZZLE Runner",
+  "short_name": "Runner",
+  "description": "Build and run PUZZLE programs",
+  "version": "0.1",
+  "manifest_version": 2
+}

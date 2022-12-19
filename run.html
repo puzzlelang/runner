@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>PUZZLE</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/puzzlelang@latest/puzzle.browser.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Puzzle Shell">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="leto-min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://unpkg.com/@isomorphic-git/lightning-fs"></script>
+    <script type="module">
+         fs = new LightningFS('fs');
+    import http from 'https://unpkg.com/isomorphic-git@beta/http/web/index.js';
+    window.http = http;
+    </script>
+</head>
+
+<body>
+    <div id="app" class="leto-frame">
+        <div class="output leto-group bottom-sheet" style="background: rgb(16 16 16)">
+            <center style="width: 100%">
+                <div class="main-wrapper leto-text-center" style="max-height: 100%;overflow: scroll;">
+                        <div class="leto-text-left leto-group">
+
+                                <div class="" v-show="output">
+                        
+                                        <pre class="leto-text-white " style="margin-left: 10px;display: inline-block;color:#999999" v-html="output"></pre>
+                                
+
+                                </div>
+                               
+                                <div  id="ui"></div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </center>
+        </div>
+    </div>
+    <script src="ace-builds-1.1.4/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="subdir.js"></script>
+    <script src="index.js"></script>
+    <script>
+    // Read query string parameter
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+
+    document.title = getParameterByName('name') || 'PUZZLE'
+
+
+    if(getParameterByName('file')){
+
+        fs.readFile(decodeURIComponent(getParameterByName('file')), function(err, data) {
+            if(err) return;
+
+            try {
+                window.puzzle.parse(new TextDecoder("utf-8").decode(data))
+            } catch(e){
+                alert('parse error')
+            }
+        })
+    }
+
+    window.addEventListener("message", (event) => {
+      alert(111)
+    }, false);
+
+    </script>
+</body>
+
+</html>
