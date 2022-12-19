@@ -23,13 +23,13 @@
 
 <body>
     <div id="app" class="leto-frame">
-        <div class="" v-show="runMode">
-            <div class="leto-pl-xs">
+         <div class="" v-show="runMode">
+            <div class="leto-pl-xs" >
                 <pre class="leto-text-white " style="margin-left: 10px;display: inline-block;color:#999999" v-html="output"></pre>
             </div>
-        </div>
+         </div>
 
-        <div class="output leto-pv-sm leto-group bottom-sheet" style="background: rgb(16 16 16)" v-if="!runMode">
+        <div class="output leto-pv-sm leto-group bottom-sheet" style="background: rgb(16 16 16)" v-show="!runMode">
 
             <center style="width: 100%">
                 <div class="main-wrapper leto-text-center" style="max-height: 100%;overflow: scroll;">
@@ -84,7 +84,7 @@
 
                                 </div>
                                
-                                <div  id="ui"></div>
+                                <div id="ui"></div>
 
                             </div>
 
