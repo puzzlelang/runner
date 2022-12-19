@@ -23,23 +23,14 @@
 
 <body>
     <div id="app" class="leto-frame">
-        <div class="output leto-pv-sm leto-group bottom-sheet" style="background: rgb(16 16 16)">
-            <div class="dropdown leto-card leto-border-none leto-m leto-mt-md-tablet leto-ml-xl-tablet" v-if="currentProject == '__..__'">
-                 
-                    <div class="leto-text-sm leto-ml-sm leto-text-dark-grey leto-button-sm leto-click leto-inline-block " v-if="currentProject != null" v-on:click="currentProject = undefined">
-                                    <div style="font-weight:bold;color:#999999">
-                                       
-                                            <i class="fa fa-code"></i> ...
-                                        
-                                    </div>
-                                </div>
-
-                <div v-for="(project, k) in projects" class="leto-inline-block leto-m-xs leto-click" v-on:click="useProject(k)">
-                    {{k.split('/')[k.split('/').length-1]}} <span v-on:click="unlinkProject(k)" class="fa fa-unlink"></span>
-                </div>
-                <div class="leto-button-xs leto-text-white leto-border-none" v-on:click="addProject(undefined);addOptionsShown=false"><span class="">+</span></div>
+        <div class="" v-show="runMode">
+            <div class="leto-pl-xs">
+                <pre class="leto-text-white " style="margin-left: 10px;display: inline-block;color:#999999" v-html="output"></pre>
             </div>
-           
+        </div>
+
+        <div class="output leto-pv-sm leto-group bottom-sheet" style="background: rgb(16 16 16)" v-if="!runMode">
+
             <center style="width: 100%">
                 <div class="main-wrapper leto-text-center" style="max-height: 100%;overflow: scroll;">
                     <div class="leto-text-left leto-group">
@@ -47,7 +38,6 @@
                         
                            <div class="leto-ml-xs leto-text-left" v-if="ideMode || true">
                                         
-                                        <!--div class="leto-block leto-text-xs leto-text-white leto-m-xs"><b>Scripts</b> </div-->
                                         <div v-for="(project, k) in projects" class="leto-block" v-if="!addOptionsShown && currentProject == k">
                                            
                                             <subdir :k="k" />
@@ -60,7 +50,6 @@
 
                               <div class="leto-pt" v-show="currentProject != '__..__'">
  
-                            
                             <div class="" style="
                     padding: 10px;padding-bottom: 0px;
                     border-radius: 10px;max-width: 95%">

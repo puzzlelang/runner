@@ -38,6 +38,7 @@ var emojis = [
 var app = new Vue({
     el: '#app',
     data: {
+        runMode: true,
         rootFiles: [],
         rootDirectories: [],
         currentEditorClass: 'max-height: 100%; overflow: scroll; position: absolute; width: 40% !important; height: 100%; left: auto !important; right: 0px; top: 0px; transform: translate(0px, 0px);',
@@ -68,7 +69,6 @@ var app = new Vue({
             style: null,
             js: null
         },
-        directoryShown: false,
         staticContext: [
             /*{
                 title: "Open Files",
@@ -76,19 +76,12 @@ var app = new Vue({
                 buttons: [{title: "Open in Explorer", action: ""}, {title: "Open in IDE", action: ""}]
             }*/
         ],
-        currentContext: [
-
-        ],
         externalWindow: null
     },
     methods: {
         openWindow: function(file){
             var self = this;
-            this.externalWindow = window.open('run.html?file='+encodeURIComponent(file), 'externalWindow', "left=100,top=100,width=320,height=320");
-
-            /*setTimeout(() => {
-                self.externalWindow.postMessage('fssdg', 'run.html')
-            }, 10000)*/
+            this.externalWindow = window.open('index.html?file='+encodeURIComponent(file), 'externalWindow', "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,left=100,top=100,width=320,height=320");
         },
         generateRunner: function(script) {
             var b64 = btoa(script);
@@ -648,6 +641,23 @@ var app = new Vue({
 
         // initialize ace.js editor
         document.addEventListener('DOMContentLoaded', function() {
+
+
+            if(getParameterByName('file')){
+
+                fs.readFile(decodeURIComponent(getParameterByName('file')), function(err, data) {
+                    if(err) return alert('file not found');
+
+                    try {
+                        window.puzzle.parse(new TextDecoder("utf-8").decode(data))
+                        self.runMode = true;
+                    } catch(e){
+                        alert('parse error')
+                    }
+                })
+            } else self.runMode = false;
+
+
 
             var editor = ace.edit("editor");
             editor.setTheme("ace/theme/monokai");
