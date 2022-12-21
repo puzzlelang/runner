@@ -38,7 +38,7 @@ var emojis = [
 var app = new Vue({
     el: '#app',
     data: {
-        runMode: true,
+        runMode: false,
         rootFiles: [],
         rootDirectories: [],
         currentEditorClass: 'max-height: 100%; overflow: scroll; position: absolute; width: 40% !important; height: 100%; left: auto !important; right: 0px; top: 0px; transform: translate(0px, 0px);',
@@ -76,12 +76,37 @@ var app = new Vue({
                 buttons: [{title: "Open in Explorer", action: ""}, {title: "Open in IDE", action: ""}]
             }*/
         ],
-        externalWindow: null
+        externalWindow: null,
+        editorOnly: false,
     },
     methods: {
         openWindow: function(file){
             var self = this;
-            this.externalWindow = window.open('index.html?file='+encodeURIComponent(file), 'externalWindow', "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,left=100,top=100,width=320,height=320");
+            this.externalWindow = window.open('index.html?editorOnly=true&file='+decodeURIComponent(file), 'externalWindow', "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,left=200,top=200,width=600,height=500");
+            
+            location.href="?file="+encodeURIComponent(file);
+
+            fs.readFile(file, function(err, data) {
+                    if(err) return alert('file not found');
+
+
+                    try {
+                        window.puzzle.parse(new TextDecoder("utf-8").decode(data))
+                        self.runMode = true;
+                    } catch(e){
+                        alert('parse error')
+                    }
+                })
+
+            /*var interval = setInterval(() => {
+                if(self.externalWindow.closed) {
+                    setTimeout(() => {
+                        self.externalWindow = null;
+                    }, 100);
+                    self.runMode = false;
+                } 
+                clearInterval(interval);
+            }, 1000)*/
         },
         generateRunner: function(script) {
             var b64 = btoa(script);
@@ -370,6 +395,22 @@ var app = new Vue({
             //if ((this.content || "").includes('lx_autorun')) this.runCode(this.content);
         },
 
+        useFileInstant: function(path){
+            var self = this;
+
+            fs.readFile(path, function(err, data) {
+                    if(err) return alert('file not found');
+
+                    try {
+                        self.openedFile = path;
+                        self.content = new TextDecoder("utf-8").decode(data);
+                        bus.$emit('set-content', new TextDecoder("utf-8").decode(data));
+                    } catch(e){
+                        alert('parse error')
+                    }
+                })
+        },
+
         deleteFile: function(k) {
             var self = this;
 
@@ -643,7 +684,7 @@ var app = new Vue({
         document.addEventListener('DOMContentLoaded', function() {
 
 
-            if(getParameterByName('file')){
+            if(getParameterByName('file') && getParameterByName('editorOnly') != 'true'){
 
                 fs.readFile(decodeURIComponent(getParameterByName('file')), function(err, data) {
                     if(err) return alert('file not found');
@@ -655,7 +696,23 @@ var app = new Vue({
                         alert('parse error')
                     }
                 })
-            } else self.runMode = false;
+            } else if(getParameterByName('file') && getParameterByName('editorOnly') == 'true'){
+
+                fs.readFile(decodeURIComponent(getParameterByName('file')), function(err, data) {
+                    if(err) return alert('file not found');
+
+                    try {
+                        self.useFileInstant(getParameterByName('file'))
+                    } catch(e){
+                        alert('parse error')
+                    }
+                })
+            } {
+                self.runMode = false;
+                if(getParameterByName('editorOnly') == 'true'){
+                    self.editorOnly = true;
+                }
+            }
 
 
 

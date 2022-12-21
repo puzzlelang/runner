@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>PUZZLE</title>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/puzzlelang@latest/puzzle.browser.js"></script>
+    <script type="text/javascript" src="puzzle-local.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Puzzle Shell">
@@ -23,22 +23,21 @@
 
 <body>
     <div id="app" class="leto-frame">
-         <div class="" v-show="runMode">
+         <div v-show="runMode">
             <div class="leto-pl-xs" >
                 <pre class="leto-text-white " style="margin-left: 10px;display: inline-block;color:#999999" v-html="output"></pre>
             </div>
          </div>
 
-        <div class="output leto-pv-sm leto-group bottom-sheet" style="background: rgb(16 16 16)" v-show="!runMode">
+        <div class="output leto-pv-sm leto-group bottom-sheet" style="background: rgb(16 16 16)" v-bind:class="{'full-height-width leto-p-none': editorOnly}">
 
             <center style="width: 100%">
-                <div class="main-wrapper leto-text-center" style="max-height: 100%;overflow: scroll;">
+                <div class="main-wrapper leto-text-center" style="max-height: 100%;overflow: scroll;" v-bind:class="{'full-height-width': editorOnly}" v-show="runMode == false">
                    
-
-                        <div class="main-content leto-text-left" style="background: none;">
+                        <div class="main-content leto-text-left leto-p-xs" style="background: none;" v-bind:class="{'full-height-width leto-p-none': editorOnly}">
 
  <div class="leto-text-left leto-group">
-                        <div class="leto-width-fifth" style="min-width: 200px;">
+                        <div class="">
                         
                            <div class="leto-ml-xs leto-text-left" v-if="ideMode || true">
                                         
@@ -50,7 +49,7 @@
 
                         </div>
                         <div class="leto-width-full">
-                              <div class="leto-pt" v-show="currentProject != '__..__'">
+                              <div class="" v-show="currentProject != '__..__'">
  
                             <div class="" style="
                     padding: 10px;padding-bottom: 0px;

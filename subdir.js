@@ -155,7 +155,7 @@ var subdir = {
             <div class="times-hover leto-pv-xxs leto-badge leto-border-none leto-bg-black leto-inline-block">
                     
                     <div class="leto-text-white leto-pb-xxs leto-click leto-text-sm">
-                    <span v-on:click="useFile(t);useTab(t)"><!--span class="fa fa-file leto-mr-xxs times-hide"></span--> {{t}} <span class="leto-text-light-black">{{file.content.substring(0, 10) || '(empty)'}}</span> <div class="leto-ml-xs leto-color-grey leto-click times" v-on:click="deleteFile(t)">&times;</div></span>
+                    <span v-on:click="useFile(t);useTab(t)"><!--span class="fa fa-file leto-mr-xxs times-hide"></span--> {{t}} <!--span class="leto-text-light-black">{{file.content.substring(0, 10) || '(empty)'}}</span--> <div class="leto-ml-xs leto-color-grey leto-click times" v-on:click="deleteFile(t)">&times;</div></span>
                     
                 </div>
                 </div>
