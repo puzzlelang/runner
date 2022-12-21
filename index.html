@@ -3,16 +3,13 @@
 
 <head>
     <meta charset="utf-8">
-    <title>PUZZLE</title>
+    <title>PUZZLE Runner</title>
     <script type="text/javascript" src="puzzle-local.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Puzzle Shell">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" type="text/css" href="leto-min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://unpkg.com/@isomorphic-git/lightning-fs"></script>
     <script type="module">
          fs = new LightningFS('fs');
@@ -20,85 +17,36 @@
         window.http = http;
     </script>
 </head>
-
 <body>
-    <div id="app" class="leto-frame">
-         <div v-show="runMode">
-            <div class="leto-pl-xs" >
-                <pre class="leto-text-white " style="margin-left: 10px;display: inline-block;color:#999999" v-html="output"></pre>
-            </div>
-         </div>
+    Your options:<br>
+    <ul>
+        <li>Load a file: <input type="file" id="file-selector" multiple></li>
+        <li>Open remote file: <a href="#" onclick="openRemoteFile()">?file=https://domain.com/file.js</a></li>
+        <li>Drag a file onto anywhere here</li>
+        <li>Use a script directly via: ?script=...</li>
+    </ul>
+</body>
+<script>
+    function runCode(code) {
+        window.puzzle.parse(code);
+    }
 
-        <div class="output leto-pv-sm leto-group bottom-sheet" style="background: rgb(16 16 16)" v-bind:class="{'full-height-width leto-p-none': editorOnly}">
+    function openRemoteFile(){
+        var file = prompt('Remote file:', 'https://');
+        fetch(file)
+            .then(res => res.text())
+            .then(data => {
+                window.puzzle.parse(data)
+            });
+    }
 
-            <center style="width: 100%">
-                <div class="main-wrapper leto-text-center" style="max-height: 100%;overflow: scroll;" v-bind:class="{'full-height-width': editorOnly}" v-show="runMode == false">
-                   
-                        <div class="main-content leto-text-left leto-p-xs" style="background: none;" v-bind:class="{'full-height-width leto-p-none': editorOnly}">
+    function writeFile(k, content){
+        s.writeFile(k, content, function(err, data) {
+            if (!err) {
+            } else alert(err)
+        })
+    }
 
- <div class="leto-text-left leto-group">
-                        <div class="">
-                        
-                           <div class="leto-ml-xs leto-text-left" v-if="ideMode || true">
-                                        
-                                        <div v-for="(project, k) in projects" class="leto-block" v-if="!addOptionsShown && currentProject == k">
-                                           
-                                            <subdir :k="k" />
-                                        </div>
-                                </div>
-
-                        </div>
-                        <div class="leto-width-full">
-                              <div class="" v-show="currentProject != '__..__'">
- 
-                            <div class="" style="
-                    padding: 10px;padding-bottom: 0px;
-                    border-radius: 10px;max-width: 95%">
-                                    <div id="editor"></div>
-                                    </div>
-
-                                    <div class="leto-ml leto-group">
-<div class="leto-text-dark-grey leto-bubble-xs leto-click leto-group leto-vertical-center leto-horizontal-center leto-mh-xxs" v-if="!scriptOptionsShown" v-bind:class="{'disabled': !content}" v-on:click="runCode(content)"><i class="fa fa-play"></i></div>
-
-                                    <div class="leto-text-dark-grey leto-bubble-xs leto-click leto-mh-xxs" v-if="!scriptOptionsShown" v-bind:class="{'disabled': !content || !currentProject}" v-on:click="saveContent()"><i class="fa fa-save"></i></div>
-
-                                    <div class="leto-text-dark-grey leto-bubble-xs leto-mh-xxs leto-click" v-if="!scriptOptionsShown" v-bind:class="{'disabled': !content || !currentProject}" v-on:click="openWindow(openedFile)"><i class="fa fa-window-maximize"></i></div>
-                                    
-                                </div>
-                             
-                            </div>
-
-                          </div>
-                      </div>
-                            </div>
-                          
-                          
-                        </div>
-                        <div class="leto-text-left leto-group">
-
-                                  <div class="" v-show="output">
-                                      <div class="leto-pl-xs" >
-                                <pre class="leto-text-white " style="margin-left: 10px;display: inline-block;color:#999999" v-html="output"></pre>
-                                </div>
-
-                                </div>
-                               
-                                <div id="ui"></div>
-
-                           
-
-                        </div>
-
-                    </div>
-                </div>
-            </center>
-   
-    </div>
-    <script src="ace-builds-1.1.4/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="subdir.js"></script>
-    <script src="index.js"></script>
-    <script>
     function getParameterByName(name, url) {
         if (!url) url = window.location.href;
         name = name.replace(/[\[\]]/g, '\\$&');
@@ -109,10 +57,63 @@
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
 
-    document.title = getParameterByName('name') || 'PUZZLE'
+    function loadAsText(theFile) {
+        var reader = new FileReader();
+        reader.onload = function(loadedEvent) {
+            window.puzzle.parse(loadedEvent.target.result)
+        }
+        reader.readAsText(theFile);
+    }
 
-    puzzle.parse(window.puzzle_script)
-    </script>
-</body>
+    const fileSelector = document.getElementById('file-selector');
+    fileSelector.addEventListener('change', (event) => {
+      const fileList = event.target.files;
+      
+      for(var i=0; i < fileList.length; i++ ) {
+        loadAsText(fileList[i]);
+      }
+    }); 
 
+    const dropArea = document.querySelector('body');
+
+    dropArea.addEventListener('dragover', (event) => {
+      event.stopPropagation();
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'copy';
+    });
+
+    dropArea.addEventListener('drop', (event) => {
+      event.stopPropagation();
+      event.preventDefault();
+      const fileList = event.dataTransfer.files;
+      for(var i=0; i < fileList.length; i++ ) {
+        loadAsText(fileList[i]);
+      }
+    });
+
+    var fileFromParam = decodeURIComponent(getParameterByName('file'));
+    var inlineScriptFromParam = getParameterByName('script');
+
+    // File in query string
+    if(fileFromParam){
+        // Remote file
+        if(fileFromParam.includes('http://') || fileFromParam.includes('https://')){
+            fetch(fileFromParam)
+                .then(res => res.text())
+                .then(data => {
+                    window.puzzle.parse(data)
+                });
+        } 
+        // local file (desktop version)
+        else {
+            // tbd...
+        }
+    }
+    // Query string script
+    else if(inlineScriptFromParam) {
+        runCode(atob(inlineScriptFromParam))
+    }
+
+
+</script>
 </html>
