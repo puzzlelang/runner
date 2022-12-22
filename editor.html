@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>PUZZLE Instant Editor</title>
+    <script type="text/javascript" src="puzzle-local.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Puzzle Shell">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <!--script src="https://unpkg.com/@isomorphic-git/lightning-fs"></script>
+    <script type="module">
+         fs = new LightningFS('fs');
+        import http from 'https://unpkg.com/isomorphic-git@beta/http/web/index.js';
+        window.http = http;
+    </script-->
+    <style type="text/css">
+        html, body {
+            height: 100%;
+            width: 100%;
+            background: #111111;
+            color: white;
+        }
+        
+        textarea {
+            width: 100%;
+            height: calc(100% - 50px);
+            border: none;
+            background: #111111;
+            color: white;
+        }
+
+        input:focus, textarea {
+            outline: none !important;
+        }   
+    </style>
+</head>
+<body>
+    <a onclick="runCode(document.getElementById('editor').value)"> &#8227; Run</a><br><br>
+    <textarea id="editor" placeholder="Write a script"></textarea>
+</body>
+<script>
+
+    function runCode(value){
+        window.opener.postMessage(value, '*');
+    }
+
+    var textareas = document.getElementsByTagName('textarea');
+    var count = textareas.length;
+    for(var i=0;i<count;i++){
+        textareas[i].onkeydown = function(e){
+            if(e.keyCode==9 || e.which==9){
+                e.preventDefault();
+                var s = this.selectionStart;
+                this.value = this.value.substring(0,this.selectionStart) + "\t" + this.value.substring(this.selectionEnd);
+                this.selectionEnd = s+1; 
+            }
+        }
+    }
+
+    // key handlers for save, run and add tab
+    document.addEventListener("keydown", function(e) {
+        if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) && e.keyCode == 83) {
+            e.preventDefault();
+            // save
+        }
+
+        if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) && e.keyCode == 13) {
+            e.preventDefault();
+            runCode(document.getElementById('editor').value)
+        }
+    }, false);
+</script>
+</html>

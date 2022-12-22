@@ -10,25 +10,55 @@
     <meta name="apple-mobile-web-app-title" content="Puzzle Shell">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <script src="https://unpkg.com/@isomorphic-git/lightning-fs"></script>
+    <!--script src="https://unpkg.com/@isomorphic-git/lightning-fs"></script>
     <script type="module">
          fs = new LightningFS('fs');
         import http from 'https://unpkg.com/isomorphic-git@beta/http/web/index.js';
         window.http = http;
-    </script>
+    </script-->
+    <style type="text/css">
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+        ul li {
+            border: 4px dashed lightgrey;
+            color: #333333;
+            font-size: 20px;
+            overflow: hidden;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 10px;
+            padding: 20px;
+            height: 120px;
+            width: 120px;
+        }
+
+        ul {
+            position: relative;
+            top: 30%;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    Your options:<br>
-    <ul>
-        <li>Load a file: <input type="file" id="file-selector" multiple></li>
-        <li>Open remote file: <a href="#" onclick="openRemoteFile()">?file=https://domain.com/file.js</a></li>
-        <li>Drag a file onto anywhere here</li>
-        <li>Use a script directly via: ?script=...</li>
+    <ul id="main-selector">
+        <li><input type="file" id="file-selector" multiple><br><br> or drag'n drop one here</li>
+        <li><br>Open remote file: <a href="#" onclick="openRemoteFile()">https://...</a></li>
+        <li><br>Use an <br><a href="#" onclick="">encoded script</a></li>
+        <li><br><br><a onclick="openEditor()">Write a script</a></li>
     </ul>
+    
 </body>
 <script>
     function runCode(code) {
         window.puzzle.parse(code);
+    }
+
+    function openEditor(){
+        externalWindow = window.open('editor.html', 'externalWindow', 'height=400,width=500')
+        document.getElementById('main-selector').remove();
+        //document.body.innerText='Write code in editor window.';
     }
 
     function openRemoteFile(){
@@ -114,6 +144,10 @@
         runCode(atob(inlineScriptFromParam))
     }
 
+
+    window.addEventListener("message", (event) => {
+        runCode(event.data);
+    }, false);
 
 </script>
 </html>
