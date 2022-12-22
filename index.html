@@ -21,34 +21,35 @@
             height: 100%;
             width: 100%;
         }
-        ul li {
-            border: 4px dashed lightgrey;
-            color: #333333;
-            font-size: 20px;
+        .box {
+            //border: 4px dashed #eeeeee;
+            color: #666666;
+            font-size: 22px;
             overflow: hidden;
             border-radius: 10px;
             display: inline-block;
-            margin: 10px;
-            padding: 20px;
-            height: 120px;
-            width: 120px;
-        }
-
-        ul {
-            position: relative;
-            top: 30%;
+            //padding: 50px;
+            height: 200px;
+            margin-top: 10%;
+            //width: 50%;
             text-align: center;
         }
     </style>
 </head>
 <body>
-    <ul id="main-selector">
-        <li><input type="file" id="file-selector" multiple><br><br> or drag'n drop one here</li>
-        <li><br>Open remote file: <a href="#" onclick="openRemoteFile()">https://...</a></li>
-        <li><br>Use an <br><a href="#" onclick="">encoded script</a></li>
-        <li><br><br><a onclick="openEditor()">Write a script</a></li>
-    </ul>
-    
+    <center>
+        <div class="box" id="main-selector">
+            <div style="text-align: left;">
+                &bull; Drag a file here or &nbsp; <input type="file" id="file-selector" multiple>
+                <br><br>
+                &bull; Open remote file: <a href="#" onclick="openRemoteFile()">https://...</a>
+                <!--br><br>
+                &bull; Use an <a href="#" onclick="">encoded script</a-->
+                <br><br>
+                &bull; or <a href="#" onclick="openEditor()">write a script</a>
+            </div>
+        </div>
+    </center>
 </body>
 <script>
     function runCode(code) {
