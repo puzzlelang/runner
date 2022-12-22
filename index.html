@@ -54,11 +54,11 @@
 <script>
     function runCode(code) {
         window.puzzle.parse(code);
+        document.getElementById('main-selector').remove();
     }
 
     function openEditor(){
         externalWindow = window.open('editor.html', 'externalWindow', 'height=400,width=500')
-        document.getElementById('main-selector').remove();
         //document.body.innerText='Write code in editor window.';
     }
 
@@ -67,7 +67,7 @@
         fetch(file)
             .then(res => res.text())
             .then(data => {
-                window.puzzle.parse(data)
+                runCode(data)
             });
     }
 
@@ -91,7 +91,7 @@
     function loadAsText(theFile) {
         var reader = new FileReader();
         reader.onload = function(loadedEvent) {
-            window.puzzle.parse(loadedEvent.target.result)
+            runCode(loadedEvent.target.result)
         }
         reader.readAsText(theFile);
     }
@@ -132,7 +132,7 @@
             fetch(fileFromParam)
                 .then(res => res.text())
                 .then(data => {
-                    window.puzzle.parse(data)
+                    runCode(data)
                 });
         } 
         // local file (desktop version)
