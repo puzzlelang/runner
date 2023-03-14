@@ -44,7 +44,8 @@
 <script>
 
     function runCode(value){
-        window.opener.postMessage(value, '*');
+       if (window.parent) window.parent.postMessage(value, '*');
+       else if(window.opener) window.opener.postMessage(value, '*');
     }
 
     var textareas = document.getElementsByTagName('textarea');

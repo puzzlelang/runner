@@ -20,6 +20,7 @@
         html, body {
             height: 100%;
             width: 100%;
+            margin: 0px;
         }
         .box {
             //border: 4px dashed #eeeeee;
@@ -34,11 +35,21 @@
             //width: 50%;
             text-align: center;
         }
+
+        .left {
+            float: left;
+            height: 100%;
+            width: 50%;
+            left: 0px;
+            top: 0px;
+            border: none;
+        }
     </style>
 </head>
 <body>
-    <center>
-        <div class="box" id="main-selector">
+    <center style="height: 100%;">
+        <iframe src="editor.html" class="left"></iframe>
+        <div class="box right" id="main-selector">
             <div style="text-align: left;">
                 &bull; Drag a file here or &nbsp; <input type="file" id="file-selector" multiple>
                 <br><br>
