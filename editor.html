@@ -38,7 +38,10 @@
     </style>
 </head>
 <body>
-    <a onclick="runCode(document.getElementById('editor').value)"> &#8227; Run</a><br><br>
+    <a onclick="runCode(document.getElementById('editor').value)"> &#8227; Run</a>
+    &nbsp;&nbsp;
+    <a onclick="saveCode(document.getElementById('editor').value)"> &check; Save</a>
+    <br><br>
     <textarea id="editor" placeholder="Write a script"></textarea>
 </body>
 <script>
@@ -46,6 +49,10 @@
     function runCode(value){
        if (window.parent) window.parent.postMessage(value, '*');
        else if(window.opener) window.opener.postMessage(value, '*');
+    }
+
+    function saveCode(value){
+        localStorage.setItem('code', value);
     }
 
     var textareas = document.getElementsByTagName('textarea');
@@ -65,13 +72,17 @@
     document.addEventListener("keydown", function(e) {
         if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) && e.keyCode == 83) {
             e.preventDefault();
-            // save
+            saveCode(document.getElementById('editor').value);
         }
 
         if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) && e.keyCode == 13) {
             e.preventDefault();
-            runCode(document.getElementById('editor').value)
+            runCode(document.getElementById('editor').value);
         }
     }, false);
+
+    if(localStorage.getItem('code')){
+        document.getElementById('editor').innerText = localStorage.getItem('code');
+    }
 </script>
 </html>
