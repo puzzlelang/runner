@@ -48,7 +48,7 @@
 <body>
     <center style="height: 100%;">
         <iframe src="editor.html" class="left"></iframe>
-        <div class="box right" id="main-selector">
+        <div class="box right" id="main">
             <div style="text-align: left;">
                 &bull; Drag a file here or &nbsp; <input type="file" id="file-selector" multiple>
                 <br><br>
@@ -64,7 +64,7 @@
 <script>
     function runCode(code) {
         window.puzzle.parse(code);
-        document.getElementById('main-selector').remove();
+        document.getElementById('main').remove();
     }
 
     function openEditor(){
